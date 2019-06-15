@@ -9,6 +9,7 @@
 #' @param alpha_var The significance threshhold alpha for the the Tukey-HSD test.
 #' @param grp_var A grouping variable for faceted plots.
 #' @keywords Tukey-HSD, annotation
+#' @import agricolae, dplyr
 #' @export
 #' @examples
 #' test_data <- tibble(value = rnorm(1000), sample = sample(LETTERS[1:5], 1000, replace = TRUE), group = sample(LETTERS[24:26], 1000, replace = TRUE))
