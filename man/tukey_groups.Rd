@@ -24,9 +24,7 @@ This is a simple helper function that outputs a data frame that can be used to a
 }
 \examples{
 test_data <- tibble(value = rnorm(1000), sample = sample(LETTERS[1:5], 1000, replace = TRUE), group = sample(LETTERS[24:26], 1000, replace = TRUE))
-head(test_data)
 annotation_df <- tukey_groups(test_data, value, sample, 1, 0.001, group)
-head(annotation_df)
 }
 \keyword{Tukey-HSD,}
 \keyword{annotation}

@@ -32,7 +32,6 @@ within each panel.
 
 ``` r
 library(tukeygrps)
-library(agricolae)
 library(tidyverse)
 
 data(mpg)

@@ -36,7 +36,6 @@ Here we use tukey_groups() to quickly add letters to a ggplot. Alpha is set to 0
 
 ```{r example, warning=FALSE, message=FALSE}
 library(tukeygrps)
-library(agricolae)
 library(tidyverse)
 
 data(mpg)

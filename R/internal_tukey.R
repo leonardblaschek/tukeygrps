@@ -19,7 +19,7 @@ internal_tukey <- function(
 ) {
   model_formula <- formula(paste0(quo_name(y), "~", quo_name(x)))
   aov1 <- aov(model_formula, data = df)
-  groups <- HSD.test(
+  groups <- agricolae::HSD.test(
     aov1,
     quo_name(x),
     alpha = alpha
