@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 [![CRAN status](https://www.r-pkg.org/badges/version/tukeygrps)](https://cran.r-project.org/package=tukeygrps)
 <!-- badges: end -->
 
-Tukeygrps provides a simple helper function for the letter annotation of (gg)plots according to statistical differences between groups determined by a Tukey-HSD test.
+Tukeygrps provides a simple helper function for the letter annotation of (gg)plots according to statistical differences between groups determined by a parametric Tukey-HSD test or a non-parametric Kruskal-wallis test.
 
 ## Installation
 
@@ -31,6 +31,17 @@ install_github("leonardblaschek/tukeygrps")
 ```
 
 ## Examples
+
+### Parametric comparisons 
+
+The distributions and sample numbers in these example datasets don't always allow for the use of a parametric test such as the Tukey-HSD. Before you use this function, make sure that your observations are:
+
+* **normally** distributed
+* **homoscedastic**
+* **independent** within and between groups
+* **equal** sample sizes
+
+If they are **not**, scroll down to the *non-parametric comparisons*.
 
 Here we use tukey_groups() to quickly add letters to a geom_point plot. Alpha is set to 0.001, the letters are printed at y = 0, and there are no additional grouping variables.
 
@@ -83,9 +94,27 @@ ggplot() +
 
 ```
 
-*Note:* The distributions and sample numbers in these example datasets don't always allow for the use of a parametric test such as the Tukey-HSD. Before you use this function, make sure that your observations are:
+### Non-parametric comparisons 
 
-* **normally** distributed
-* **homoscedastic**
-* **independent** within and between groups
-* ideally of similar sample sizes
+In case the above requirements for parametric tests are not met, we can fall back to the non-parametric Kruskal–Wallis test with *p*-value adjustment for multiple comparisons.
+
+```{r example non-parametric}
+library(tukeygrps)
+library(tidyverse)
+data(mpg)
+head(mpg)
+
+kruskal_letters <- kruskal_groups(mpg, hwy, class, 0, 0.001, "holm")
+
+head(kruskal_letters)
+
+ggplot() +
+  geom_point(data = mpg, 
+             aes(x = class,
+                 y = hwy)) +
+  geom_text(data = kruskal_letters,
+            aes(x = class,
+                y = hwy,
+                label = groups)) +
+  coord_flip()
+```

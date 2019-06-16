@@ -1,4 +1,4 @@
-#' tukey_groups internal helper function
+#' kruskal_groups internal helper function
 #'
 #' Internal helper that is called after the grouping.
 #'
@@ -10,21 +10,25 @@
 #' @keywords internal
 #' @export
 
-internal_tukey <- function(
+internal_kruskal <- function(
   df,
   y,
   x,
   pos,
-  alpha
+  alpha,
+  p_adj
 ) {
-  model_formula <- formula(paste0(quo_name(y), "~", quo_name(x)))
-  aov1 <- aov(model_formula, data = df)
-  groups <- agricolae::HSD.test(
-    aov1,
-    quo_name(x),
-    alpha = alpha
+  print(x)
+  print(quo_name(x))
+  groups <- agricolae::kruskal(
+    df[quo_name(y)],
+    df[quo_name(x)],
+    alpha = alpha,
+    p.adj = quo_name(p_adj)
   )
   groups$groups[[quo_name(x)]] <- rownames(groups$groups)
   groups$groups[[quo_name(y)]] <- pos
+  colnames(groups$groups)[1] <- "mean"
   return(groups[["groups"]])
 }
+

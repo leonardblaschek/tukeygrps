@@ -13,7 +13,7 @@ status](https://www.r-pkg.org/badges/version/tukeygrps)](https://cran.r-project.
 
 Tukeygrps provides a simple helper function for the letter annotation of
 (gg)plots according to statistical differences between groups determined
-by a Tukey-HSD test.
+by a parametric Tukey-HSD test or a non-parametric Kruskal-wallis test.
 
 ## Installation
 
@@ -25,6 +25,19 @@ install_github("leonardblaschek/tukeygrps")
 ```
 
 ## Examples
+
+### Parametric comparisons
+
+The distributions and sample numbers in these example datasets don’t
+always allow for the use of a parametric test such as the Tukey-HSD.
+Before you use this function, make sure that your observations are:
+
+  - **normally** distributed
+  - **homoscedastic**
+  - **independent** within and between groups
+  - **equal** sample sizes
+
+If they are **not**, scroll down to the *non-parametric comparisons*.
 
 Here we use tukey\_groups() to quickly add letters to a geom\_point
 plot. Alpha is set to 0.001, the letters are printed at y = 0, and there
@@ -38,12 +51,12 @@ library(tidyverse)
 #>   [.quosures     rlang
 #>   c.quosures     rlang
 #>   print.quosures rlang
-#> ── Attaching packages ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+#> ── Attaching packages ───────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
 #> ✔ ggplot2 3.1.1     ✔ purrr   0.3.2
 #> ✔ tibble  2.1.1     ✔ dplyr   0.8.1
 #> ✔ tidyr   0.8.3     ✔ stringr 1.4.0
 #> ✔ readr   1.3.1     ✔ forcats 0.4.0
-#> ── Conflicts ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+#> ── Conflicts ──────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
 #> ✖ dplyr::filter() masks stats::filter()
 #> ✖ dplyr::lag()    masks stats::lag()
 data(mpg)
@@ -131,12 +144,51 @@ ggplot() +
 
 <img src="man/figures/README-example-1.png" width="100%" />
 
-*Note:* The distributions and sample numbers in these example datasets
-don’t always allow for the use of a parametric test such as the
-Tukey-HSD. Before you use this function, make sure that your
-observations are:
+### Non-parametric comparisons
 
-  - **normally** distributed
-  - **homoscedastic**
-  - **independent** within and between groups
-  - ideally of similar sample sizes
+In case the above requirements for parametric tests are not met, we can
+fall back to the non-parametric Kruskal–Wallis test with *p*-value
+adjustment for multiple comparisons.
+
+``` r
+library(tukeygrps)
+library(tidyverse)
+data(mpg)
+head(mpg)
+#> # A tibble: 6 x 11
+#>   manufacturer model displ  year   cyl trans  drv     cty   hwy fl    class
+#>   <chr>        <chr> <dbl> <int> <int> <chr>  <chr> <int> <int> <chr> <chr>
+#> 1 audi         a4      1.8  1999     4 auto(… f        18    29 p     comp…
+#> 2 audi         a4      1.8  1999     4 manua… f        21    29 p     comp…
+#> 3 audi         a4      2    2008     4 manua… f        20    31 p     comp…
+#> 4 audi         a4      2    2008     4 auto(… f        21    30 p     comp…
+#> 5 audi         a4      2.8  1999     6 auto(… f        16    26 p     comp…
+#> 6 audi         a4      2.8  1999     6 manua… f        18    26 p     comp…
+
+kruskal_letters <- kruskal_groups(mpg, hwy, class, 0, 0.001, "holm")
+#> <quosure>
+#> expr: ^class
+#> env:  global
+#> [1] "class"
+
+head(kruskal_letters)
+#>                 mean groups      class hwy
+#> compact    175.06383      a    compact   0
+#> midsize    168.28049      a    midsize   0
+#> subcompact 165.77143      a subcompact   0
+#> 2seater    127.80000     ab    2seater   0
+#> minivan     97.04545     bc    minivan   0
+#> suv         56.43548     cd        suv   0
+
+ggplot() +
+  geom_point(data = mpg, 
+             aes(x = class,
+                 y = hwy)) +
+  geom_text(data = kruskal_letters,
+            aes(x = class,
+                y = hwy,
+                label = groups)) +
+  coord_flip()
+```
+
+<img src="man/figures/README-example non-parametric-1.png" width="100%" />
