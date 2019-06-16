@@ -13,7 +13,7 @@ internal_tukey(df, y, x, pos, alpha)
 
 \item{x}{The name of the x (independent) variable.}
 
-\item{pos}{The y value at which the letter annotation should be placed in the plot.}
+\item{pos}{The y value at which the letter annotation will be placed in the plot.}
 
 \item{alpha}{The significance threshhold alpha for the the Tukey-HSD test.}
 }

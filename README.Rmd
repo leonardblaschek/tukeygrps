@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 [![CRAN status](https://www.r-pkg.org/badges/version/tukeygrps)](https://cran.r-project.org/package=tukeygrps)
 <!-- badges: end -->
 
-Tukeygrps provides a simple helper function for the letter annotation of (gg)plots according to statistical differences between groups determined by a parametric Tukey-HSD test or a non-parametric Kruskal-wallis test.
+Tukeygrps provides simple wrapper functions for the annotation of (gg)plots according to statistical differences between groups determined by a parametric Tukey-HSD test or a non-parametric Kruskal-Wallis test. The underlying statistical functions are called from the *agricolae* package.
 
 ## Installation
 
@@ -32,22 +32,23 @@ install_github("leonardblaschek/tukeygrps")
 
 ## Examples
 
-### Parametric comparisons 
+### Parametric multiple comparisons 
 
 The distributions and sample numbers in these example datasets don't always allow for the use of a parametric test such as the Tukey-HSD. Before you use this function, make sure that your observations are:
 
 * **normally** distributed
 * **homoscedastic**
 * **independent** within and between groups
-* **equal** sample sizes
+* **equal** in sample size
 
 If they are **not**, scroll down to the *non-parametric comparisons*.
 
 Here we use tukey_groups() to quickly add letters to a geom_point plot. Alpha is set to 0.001, the letters are printed at y = 0, and there are no additional grouping variables.
 
-```{r example no groups}
+```{r example no groups, message=FALSE}
 library(tukeygrps)
 library(tidyverse)
+
 data(mpg)
 head(mpg)
 
@@ -56,9 +57,10 @@ tukey_letters <- tukey_groups(mpg, hwy, class, 0, 0.001)
 head(tukey_letters)
 
 ggplot() +
-  geom_point(data = mpg, 
+  geom_jitter(data = mpg, 
              aes(x = class,
-                 y = hwy)) +
+                 y = hwy),
+             width = 0.1) +
   geom_text(data = tukey_letters,
             aes(x = class,
                 y = hwy,
@@ -82,39 +84,61 @@ tukey_letters <- tukey_groups(diamonds, price, clarity, -1000, 0.05, cut, color)
 head(tukey_letters)
 
 ggplot() +
+  geom_jitter(data = diamonds, 
+             aes(x = clarity,
+                 y = price),
+             size = 1,
+             width = 0.1,
+             alpha = 0.25) +
   geom_boxplot(data = diamonds, 
              aes(x = clarity,
-                 y = price)) +
+                 y = price),
+             outlier.alpha = 0,
+             fill = rgb(1, 1, 1, 0.5)) +
   geom_text(data = tukey_letters,
             aes(x = clarity,
                 y = price,
-                label = groups)) +
+                label = groups),
+            size = 3) +
   facet_grid(cut ~ color) +
   coord_flip()
 
 ```
 
-### Non-parametric comparisons 
+### Non-parametric multiple comparisons 
 
 In case the above requirements for parametric tests are not met, we can fall back to the non-parametric Kruskal–Wallis test with *p*-value adjustment for multiple comparisons.
 
-```{r example non-parametric}
+```{r example non-parametric, warning=FALSE, message=FALSE}
 library(tukeygrps)
 library(tidyverse)
-data(mpg)
-head(mpg)
 
-kruskal_letters <- kruskal_groups(mpg, hwy, class, 0, 0.001, "holm")
+data(diamonds)
+diamonds <- diamonds %>% 
+  filter(cut %in% c("Ideal", "Premium", "Very Good") & color %in% c("D", "E", "F"))
+head(diamonds)
+
+kruskal_letters <- kruskal_groups(diamonds, price, clarity, -1000, 0.05, "holm", cut, color)
 
 head(kruskal_letters)
 
 ggplot() +
-  geom_point(data = mpg, 
-             aes(x = class,
-                 y = hwy)) +
+  geom_jitter(data = diamonds, 
+             aes(x = clarity,
+                 y = price),
+             size = 1,
+             width = 0.1,
+             alpha = 0.25) +
+  geom_boxplot(data = diamonds, 
+             aes(x = clarity,
+                 y = price),
+             outlier.alpha = 0,
+             fill = rgb(1, 1, 1, 0.5)) +
   geom_text(data = kruskal_letters,
-            aes(x = class,
-                y = hwy,
-                label = groups)) +
+            aes(x = clarity,
+                y = price,
+                label = groups),
+            size = 3) +
+  facet_grid(cut ~ color) +
   coord_flip()
 ```

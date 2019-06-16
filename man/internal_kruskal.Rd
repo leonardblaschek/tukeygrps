@@ -13,9 +13,11 @@ internal_kruskal(df, y, x, pos, alpha, p_adj)
 
 \item{x}{The name of the x (independent) variable.}
 
-\item{pos}{The y value at which the letter annotation should be placed in the plot.}
+\item{pos}{The y value at which the letter annotation will be placed in the plot.}
 
 \item{alpha}{The significance threshhold alpha for the the Kruskal-Wallis test.}
+
+\item{p_adj}{Method for p value adjustment. One of "none","holm","hommel", "hochberg", "bonferroni", "BH", "BY" or "fdr".}
 }
 \description{
 Internal helper that is called after the grouping.

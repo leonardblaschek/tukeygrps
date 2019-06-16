@@ -13,7 +13,7 @@ kruskal_groups(df, y_var, x_var, pos_var, alpha_var, p_adj_var, ...)
 
 \item{x_var}{The name of the x (independent) variable.}
 
-\item{pos_var}{The y value at which the letter annotation should be placed in the plot.}
+\item{pos_var}{The y value at which the letter annotation will be placed in the plot.}
 
 \item{alpha_var}{The significance threshold alpha for the the Kruskal-Wallis test.}
 
@@ -22,11 +22,12 @@ kruskal_groups(df, y_var, x_var, pos_var, alpha_var, p_adj_var, ...)
 \item{...}{Any number of grouping variables for faceted plots.}
 }
 \description{
-This is a simple helper function that outputs a data frame that can be used to annotate your plot with letter codes according to significant differences between groups. In addition to the data and formula, the function takes as input a positional variable for placement on the plot, an alpha for the Kruskal-Wallis test, and grouping variables for faceted plots.
+This is a simple wrapper function that outputs a data frame that can be used to annotate your plot with letter codes according to a Kruskal-Wallis test. In addition to the data and formula, the function takes as input a positional variable for placement on the plot, an alpha for the Kruskal-Wallis test, the method for p-value adjustment, and grouping variables for faceted plots. The underlying statistical functions are called from the 'agricolae' package.
 }
 \examples{
 test_data <- tibble(value = rnorm(1000), sample = sample(LETTERS[1:5], 1000, replace = TRUE), group = sample(LETTERS[24:26], 1000, replace = TRUE))
-annotation_df <- kruskal_groups(test_data, value, sample, 1, 0.001, group)
+annotation_df <- kruskal_groups(test_data, value, sample, 1, 0.001, "holm", group)
 }
 \keyword{Kruskal,}
 \keyword{annotation}
+\keyword{non-parametric,}
