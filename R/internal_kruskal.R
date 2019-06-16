@@ -6,7 +6,7 @@
 #' @param y The name of the y (dependent) variable.
 #' @param x The name of the x (independent) variable.
 #' @param pos The y value at which the letter annotation should be placed in the plot.
-#' @param alpha The significance threshhold alpha for the the Tukey-HSD test.
+#' @param alpha The significance threshhold alpha for the the Kruskal-Wallis test.
 #' @keywords internal
 #' @export
 

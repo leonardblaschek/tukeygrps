@@ -15,7 +15,7 @@ internal_kruskal(df, y, x, pos, alpha, p_adj)
 
 \item{pos}{The y value at which the letter annotation should be placed in the plot.}
 
-\item{alpha}{The significance threshhold alpha for the the Tukey-HSD test.}
+\item{alpha}{The significance threshhold alpha for the the Kruskal-Wallis test.}
 }
 \description{
 Internal helper that is called after the grouping.

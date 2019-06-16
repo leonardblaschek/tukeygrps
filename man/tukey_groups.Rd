@@ -15,7 +15,7 @@ tukey_groups(df, y_var, x_var, pos_var, alpha_var, ...)
 
 \item{pos_var}{The y value at which the letter annotation should be placed in the plot.}
 
-\item{alpha_var}{The significance threshhold alpha for the the Tukey-HSD test.}
+\item{alpha_var}{The significance threshold alpha for the the Tukey-HSD test.}
 
 \item{...}{Any number of grouping variables for faceted plots.}
 }

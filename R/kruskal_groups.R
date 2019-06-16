@@ -1,12 +1,12 @@
-#' Kruskal-LSD plot annotation
+#' Kruskal-Wallis plot annotation
 #'
-#' This is a simple helper function that outputs a data frame that can be used to annotate your plot with letter codes according to significant differences between groups. In addition to the data and formula, the function takes as input a positional variable for placement on the plot, an alpha for the Tukey-HSD test, and grouping variables for faceted plots.
+#' This is a simple helper function that outputs a data frame that can be used to annotate your plot with letter codes according to significant differences between groups. In addition to the data and formula, the function takes as input a positional variable for placement on the plot, an alpha for the Kruskal-Wallis test, and grouping variables for faceted plots.
 #'
 #' @param df A data.frame.
 #' @param y_var The name of the y (dependent) variable.
 #' @param x_var The name of the x (independent) variable.
 #' @param pos_var The y value at which the letter annotation should be placed in the plot.
-#' @param alpha_var The significance threshhold alpha for the the Tukey-HSD test.
+#' @param alpha_var The significance threshold alpha for the the Kruskal-Wallis test.
 #' @param p_adj_var Method for p value adjustment. One of "none","holm","hommel", "hochberg", "bonferroni", "BH", "BY" or "fdr".
 #' @param ... Any number of grouping variables for faceted plots.
 #' @keywords Kruskal, annotation
