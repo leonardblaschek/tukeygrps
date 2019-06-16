@@ -4,7 +4,7 @@
 \alias{tukey_groups}
 \title{Tukey-HSD plot annotation}
 \usage{
-tukey_groups(df, y_var, x_var, pos_var, alpha_var, grp_var)
+tukey_groups(df, y_var, x_var, pos_var, alpha_var, ...)
 }
 \arguments{
 \item{df}{A data.frame.}
@@ -17,7 +17,7 @@ tukey_groups(df, y_var, x_var, pos_var, alpha_var, grp_var)
 
 \item{alpha_var}{The significance threshhold alpha for the the Tukey-HSD test.}
 
-\item{grp_var}{A grouping variable for faceted plots.}
+\item{...}{Any number of grouping variables for faceted plots.}
 }
 \description{
 This is a simple helper function that outputs a data frame that can be used to annotate your plot with different letters according to Tukey-HSD significant differences between groups. In addition to the data and formula, the function takes as input a positional variable for placement on the plot, an alpha for the Tukey-HSD test, and a grouping variable for faceted plots.

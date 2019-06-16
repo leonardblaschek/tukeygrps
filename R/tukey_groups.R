@@ -7,7 +7,7 @@
 #' @param x_var The name of the x (independent) variable.
 #' @param pos_var The y value at which the letter annotation should be placed in the plot.
 #' @param alpha_var The significance threshhold alpha for the the Tukey-HSD test.
-#' @param grp_var A grouping variable for faceted plots.
+#' @param ... Any number of grouping variables for faceted plots.
 #' @keywords Tukey-HSD, annotation
 #' @export
 #' @examples
@@ -20,12 +20,12 @@ tukey_groups <- function(
                          x_var,
                          pos_var,
                          alpha_var,
-                         grp_var) {
+                         ...) {
   y <- enquo(y_var)
   x <- enquo(x_var)
-  grp <- enquo(grp_var)
+  grp <- enquos(...)
 
   df %>%
-    group_by(!!grp) %>%
+    group_by(!!!grp) %>%
     group_modify(~ data.frame(internal_tukey(., y, x, pos_var, alpha_var)))
 }

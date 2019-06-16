@@ -30,18 +30,17 @@ install.packages("devtools")
 install_github("leonardblaschek/tukeygrps")
 ```
 
-## Example
+## Examples
 
-Here we use tukey_groups() to quickly add letters to a ggplot. Alpha is set to 0.001, and the resulting letters indicate statistical differences within each panel.
+Here we use tukey_groups() to quickly add letters to a geom_point plot. Alpha is set to 0.001, the letters are printed at y = 0, and there are no additional grouping variables.
 
-```{r example, warning=FALSE, message=FALSE}
+```{r example no groups}
 library(tukeygrps)
 library(tidyverse)
-
 data(mpg)
 head(mpg)
 
-tukey_letters <- tukey_groups(mpg, hwy, class, 0, 0.001, cyl)
+tukey_letters <- tukey_groups(mpg, hwy, class, 0, 0.001)
 
 head(tukey_letters)
 
@@ -53,14 +52,40 @@ ggplot() +
             aes(x = class,
                 y = hwy,
                 label = groups)) +
-  facet_wrap(~ cyl) +
+  coord_flip()
+```
+
+Here we split the statistical analysis by two grouping variables ("cut" and "color"), set the alpha to 0.05 and print the letters at y = -1000.
+
+```{r example, warning=FALSE, message=FALSE}
+library(tukeygrps)
+library(tidyverse)
+
+data(diamonds)
+diamonds <- diamonds %>% 
+  filter(cut %in% c("Ideal", "Premium", "Very Good") & color %in% c("D", "E", "F"))
+head(diamonds)
+
+tukey_letters <- tukey_groups(diamonds, price, clarity, -1000, 0.05, cut, color)
+
+head(tukey_letters)
+
+ggplot() +
+  geom_boxplot(data = diamonds, 
+             aes(x = clarity,
+                 y = price)) +
+  geom_text(data = tukey_letters,
+            aes(x = clarity,
+                y = price,
+                label = groups)) +
+  facet_grid(cut ~ color) +
   coord_flip()
 
 ```
 
-**Note:** The distributions and sample numbers in this example dataset should discourage anyone from applying a parametric test such as the Tukey-HSD. Before you use this function, make sure that your observations are:
+*Note:* The distributions and sample numbers in these example datasets don't always allow for the use of a parametric test such as the Tukey-HSD. Before you use this function, make sure that your observations are:
 
-* normally distributed
-* homoscedastic
-* independent within and between groups
-* of similar sample size
+* **normally** distributed
+* **homoscedastic**
+* **independent** within and between groups
+* ideally of similar sample sizes
