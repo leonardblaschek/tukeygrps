@@ -166,10 +166,6 @@ head(mpg)
 #> 6 audi         a4      2.8  1999     6 manua… f        18    26 p     comp…
 
 kruskal_letters <- kruskal_groups(mpg, hwy, class, 0, 0.001, "holm")
-#> <quosure>
-#> expr: ^class
-#> env:  global
-#> [1] "class"
 
 head(kruskal_letters)
 #>                 mean groups      class hwy

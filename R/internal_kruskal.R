@@ -18,8 +18,6 @@ internal_kruskal <- function(
   alpha,
   p_adj
 ) {
-  print(x)
-  print(quo_name(x))
   groups <- agricolae::kruskal(
     df[quo_name(y)],
     df[quo_name(x)],
