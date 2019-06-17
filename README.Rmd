@@ -52,19 +52,27 @@ library(tidyverse)
 data(mpg)
 head(mpg)
 
-tukey_letters <- tukey_groups(mpg, hwy, class, 0, 0.001)
+tukey_letters <- tukey_groups(mpg, hwy, class, print_position = 0, stat_alpha = 0.001)
 
 head(tukey_letters)
 
 ggplot() +
-  geom_jitter(data = mpg, 
-             aes(x = class,
-                 y = hwy),
-             width = 0.1) +
-  geom_text(data = tukey_letters,
-            aes(x = class,
-                y = hwy,
-                label = groups)) +
+  geom_jitter(
+    data = mpg,
+    aes(
+      x = class,
+      y = hwy
+    ),
+    width = 0.1
+  ) +
+  geom_text(
+    data = tukey_letters,
+    aes(
+      x = class,
+      y = hwy,
+      label = groups
+    )
+  ) +
   coord_flip()
 ```
 
@@ -75,70 +83,93 @@ library(tukeygrps)
 library(tidyverse)
 
 data(diamonds)
-diamonds <- diamonds %>% 
+diamonds <- diamonds %>%
   filter(cut %in% c("Ideal", "Premium", "Very Good") & color %in% c("D", "E", "F"))
 head(diamonds)
 
-tukey_letters <- tukey_groups(diamonds, price, clarity, -1000, 0.05, cut, color)
+tukey_letters <- tukey_groups(diamonds, price, clarity, cut, color, print_position = -1000, stat_alpha = 0.05,)
 
 head(tukey_letters)
 
 ggplot() +
-  geom_jitter(data = diamonds, 
-             aes(x = clarity,
-                 y = price),
-             size = 1,
-             width = 0.1,
-             alpha = 0.25) +
-  geom_boxplot(data = diamonds, 
-             aes(x = clarity,
-                 y = price),
-             outlier.alpha = 0,
-             fill = rgb(1, 1, 1, 0.5)) +
-  geom_text(data = tukey_letters,
-            aes(x = clarity,
-                y = price,
-                label = groups),
-            size = 3) +
+  geom_jitter(
+    data = diamonds,
+    aes(
+      x = clarity,
+      y = price
+    ),
+    size = 1,
+    width = 0.1,
+    alpha = 0.25
+  ) +
+  geom_boxplot(
+    data = diamonds,
+    aes(
+      x = clarity,
+      y = price
+    ),
+    outlier.alpha = 0,
+    fill = rgb(1, 1, 1, 0.5)
+  ) +
+  geom_text(
+    data = tukey_letters,
+    aes(
+      x = clarity,
+      y = price,
+      label = groups
+    ),
+    size = 3
+  ) +
   facet_grid(cut ~ color) +
   coord_flip()
-
 ```
 
 ### Non-parametric multiple comparisons 
 
-In case the above requirements for parametric tests are not met, we can fall back to the non-parametric Kruskal–Wallis test with *p*-value adjustment for multiple comparisons.
+In case the above requirements for parametric tests are not met, we can fall back to the non-parametric Kruskal–Wallis test with *p*-value adjustment for multiple comparisons. Here we place the letter codes 0.5 standard deviations above the maximum values.
 
 ```{r example non-parametric, warning=FALSE, message=FALSE}
 library(tukeygrps)
 library(tidyverse)
 
 data(diamonds)
-diamonds <- diamonds %>% 
+diamonds <- diamonds %>%
   filter(cut %in% c("Ideal", "Premium", "Very Good") & color %in% c("D", "E", "F"))
 head(diamonds)
 
-kruskal_letters <- kruskal_groups(diamonds, price, clarity, -1000, 0.05, "holm", cut, color)
+kruskal_letters <- kruskal_groups(diamonds, price, clarity, cut, color, print_position = "above", print_adjust = 0.5)
 
 head(kruskal_letters)
 
 ggplot() +
-  geom_jitter(data = diamonds, 
-             aes(x = clarity,
-                 y = price),
-             size = 1,
-             width = 0.1,
-             alpha = 0.25) +
-  geom_boxplot(data = diamonds, 
-             aes(x = clarity,
-                 y = price),
-             outlier.alpha = 0,
-             fill = rgb(1, 1, 1, 0.5)) +
-  geom_text(data = kruskal_letters,
-            aes(x = clarity,
-                y = price,
-                label = groups),
-            size = 3) +
+  geom_jitter(
+    data = diamonds,
+    aes(
+      x = clarity,
+      y = price
+    ),
+    size = 1,
+    width = 0.1,
+    alpha = 0.25
+  ) +
+  geom_boxplot(
+    data = diamonds,
+    aes(
+      x = clarity,
+      y = price
+    ),
+    outlier.alpha = 0,
+    fill = rgb(1, 1, 1, 0.5)
+  ) +
+  geom_text(
+    data = kruskal_letters,
+    aes(
+      x = clarity,
+      y = price,
+      label = groups
+    ),
+    size = 3
+  ) +
   facet_grid(cut ~ color) +
   coord_flip()
 ```

@@ -4,20 +4,23 @@
 \alias{internal_kruskal}
 \title{kruskal_groups internal helper function}
 \usage{
-internal_kruskal(df, y, x, pos, alpha, p_adj)
+internal_kruskal(df, y, x, print_position, print_adjust, stat_alpha,
+  p_adj_method)
 }
 \arguments{
 \item{df}{A data.frame.}
 
-\item{y}{The name of the y (dependent) variable.}
+\item{print_position}{The y position at which the letter annotation will be placed in the plot. One of "above", "mean", "below", or a numeric value.}
 
-\item{x}{The name of the x (independent) variable.}
+\item{print_adjust}{Adjustment of the letter position multiples of the overall standard deviations. Defaults to 1.}
 
-\item{pos}{The y value at which the letter annotation will be placed in the plot.}
+\item{stat_alpha}{The significance threshold alpha for the the Kruskal-Wallis test. Defaults to 0.05.}
 
-\item{alpha}{The significance threshhold alpha for the the Kruskal-Wallis test.}
+\item{p_adj_method}{Method for p value adjustment. One of "none","holm","hommel", "hochberg", "bonferroni", "BH", "BY" or "fdr". Defaults to "holm".}
 
-\item{p_adj}{Method for p value adjustment. One of "none","holm","hommel", "hochberg", "bonferroni", "BH", "BY" or "fdr".}
+\item{y_var}{The name of the y (dependent) variable.}
+
+\item{x_var}{The name of the x (independent) variable.}
 }
 \description{
 Internal helper that is called after the grouping.

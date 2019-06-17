@@ -61,7 +61,7 @@ head(mpg)
 #> 5 audi         a4      2.8  1999     6 auto(… f        16    26 p     comp…
 #> 6 audi         a4      2.8  1999     6 manua… f        18    26 p     comp…
 
-tukey_letters <- tukey_groups(mpg, hwy, class, 0, 0.001)
+tukey_letters <- tukey_groups(mpg, hwy, class, print_position = 0, stat_alpha = 0.001)
 
 head(tukey_letters)
 #>            hwy groups      class
@@ -73,14 +73,22 @@ head(tukey_letters)
 #> suv          0     cd        suv
 
 ggplot() +
-  geom_jitter(data = mpg, 
-             aes(x = class,
-                 y = hwy),
-             width = 0.1) +
-  geom_text(data = tukey_letters,
-            aes(x = class,
-                y = hwy,
-                label = groups)) +
+  geom_jitter(
+    data = mpg,
+    aes(
+      x = class,
+      y = hwy
+    ),
+    width = 0.1
+  ) +
+  geom_text(
+    data = tukey_letters,
+    aes(
+      x = class,
+      y = hwy,
+      label = groups
+    )
+  ) +
   coord_flip()
 ```
 
@@ -94,7 +102,7 @@ library(tukeygrps)
 library(tidyverse)
 
 data(diamonds)
-diamonds <- diamonds %>% 
+diamonds <- diamonds %>%
   filter(cut %in% c("Ideal", "Premium", "Very Good") & color %in% c("D", "E", "F"))
 head(diamonds)
 #> # A tibble: 6 x 10
@@ -107,7 +115,7 @@ head(diamonds)
 #> 5  0.32 Premium   E     I1       60.9    58   345  4.38  4.42  2.68
 #> 6  0.23 Very Good E     VS2      63.8    55   352  3.85  3.92  2.48
 
-tukey_letters <- tukey_groups(diamonds, price, clarity, -1000, 0.05, cut, color)
+tukey_letters <- tukey_groups(diamonds, price, clarity, cut, color, print_position = -1000, stat_alpha = 0.05,)
 
 head(tukey_letters)
 #> # A tibble: 6 x 5
@@ -122,22 +130,34 @@ head(tukey_letters)
 #> 6 Very Good D     -1000 c      VS1
 
 ggplot() +
-  geom_jitter(data = diamonds, 
-             aes(x = clarity,
-                 y = price),
-             size = 1,
-             width = 0.1,
-             alpha = 0.25) +
-  geom_boxplot(data = diamonds, 
-             aes(x = clarity,
-                 y = price),
-             outlier.alpha = 0,
-             fill = rgb(1, 1, 1, 0.5)) +
-  geom_text(data = tukey_letters,
-            aes(x = clarity,
-                y = price,
-                label = groups),
-            size = 3) +
+  geom_jitter(
+    data = diamonds,
+    aes(
+      x = clarity,
+      y = price
+    ),
+    size = 1,
+    width = 0.1,
+    alpha = 0.25
+  ) +
+  geom_boxplot(
+    data = diamonds,
+    aes(
+      x = clarity,
+      y = price
+    ),
+    outlier.alpha = 0,
+    fill = rgb(1, 1, 1, 0.5)
+  ) +
+  geom_text(
+    data = tukey_letters,
+    aes(
+      x = clarity,
+      y = price,
+      label = groups
+    ),
+    size = 3
+  ) +
   facet_grid(cut ~ color) +
   coord_flip()
 ```
@@ -148,14 +168,15 @@ ggplot() +
 
 In case the above requirements for parametric tests are not met, we can
 fall back to the non-parametric Kruskal–Wallis test with *p*-value
-adjustment for multiple comparisons.
+adjustment for multiple comparisons. Here we place the letter codes 0.5
+standard deviations above the maximum values.
 
 ``` r
 library(tukeygrps)
 library(tidyverse)
 
 data(diamonds)
-diamonds <- diamonds %>% 
+diamonds <- diamonds %>%
   filter(cut %in% c("Ideal", "Premium", "Very Good") & color %in% c("D", "E", "F"))
 head(diamonds)
 #> # A tibble: 6 x 10
@@ -168,37 +189,49 @@ head(diamonds)
 #> 5  0.32 Premium   E     I1       60.9    58   345  4.38  4.42  2.68
 #> 6  0.23 Very Good E     VS2      63.8    55   352  3.85  3.92  2.48
 
-kruskal_letters <- kruskal_groups(diamonds, price, clarity, -1000, 0.05, "holm", cut, color)
+kruskal_letters <- kruskal_groups(diamonds, price, clarity, cut, color, print_position = "above", print_adjust = 0.5)
 
 head(kruskal_letters)
 #> # A tibble: 6 x 6
 #> # Groups:   cut, color [1]
-#>   cut       color  mean groups clarity price
-#>   <ord>     <ord> <dbl> <chr>  <chr>   <dbl>
-#> 1 Very Good D     1243. a      IF      -1000
-#> 2 Very Good D      895. b      SI2     -1000
-#> 3 Very Good D      794. bc     I1      -1000
-#> 4 Very Good D      765. c      SI1     -1000
-#> 5 Very Good D      731. c      VS2     -1000
-#> 6 Very Good D      686. c      VS1     -1000
+#>   cut       color  mean groups clarity  price
+#>   <ord>     <ord> <dbl> <chr>  <chr>    <dbl>
+#> 1 Very Good D     1243. a      IF      20304.
+#> 2 Very Good D      895. b      SI2     20288.
+#> 3 Very Good D      794. bc     I1       5578.
+#> 4 Very Good D      765. c      SI1     18048.
+#> 5 Very Good D      731. c      VS2     18915.
+#> 6 Very Good D      686. c      VS1     18512.
 
 ggplot() +
-  geom_jitter(data = diamonds, 
-             aes(x = clarity,
-                 y = price),
-             size = 1,
-             width = 0.1,
-             alpha = 0.25) +
-  geom_boxplot(data = diamonds, 
-             aes(x = clarity,
-                 y = price),
-             outlier.alpha = 0,
-             fill = rgb(1, 1, 1, 0.5)) +
-  geom_text(data = kruskal_letters,
-            aes(x = clarity,
-                y = price,
-                label = groups),
-            size = 3) +
+  geom_jitter(
+    data = diamonds,
+    aes(
+      x = clarity,
+      y = price
+    ),
+    size = 1,
+    width = 0.1,
+    alpha = 0.25
+  ) +
+  geom_boxplot(
+    data = diamonds,
+    aes(
+      x = clarity,
+      y = price
+    ),
+    outlier.alpha = 0,
+    fill = rgb(1, 1, 1, 0.5)
+  ) +
+  geom_text(
+    data = kruskal_letters,
+    aes(
+      x = clarity,
+      y = price,
+      label = groups
+    ),
+    size = 3
+  ) +
   facet_grid(cut ~ color) +
   coord_flip()
 ```
