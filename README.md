@@ -199,7 +199,16 @@ head(diamonds)
 #> 5  0.32 Premium   E     I1       60.9    58   345  4.38  4.42  2.68
 #> 6  0.23 Very Good E     VS2      63.8    55   352  3.85  3.92  2.48
 
-kruskal_letters <- letter_groups(diamonds, price, clarity, "kruskal", cut, color, print_position = "above", print_adjust = 0.5)
+kruskal_letters <- letter_groups(
+  diamonds,
+  price,
+  clarity,
+  "kruskal",
+  cut,
+  color,
+  print_position = "above",
+  print_adjust = 0.5
+)
 
 head(kruskal_letters)
 #> # A tibble: 6 x 6
