@@ -147,7 +147,16 @@ diamonds <- diamonds %>%
   filter(cut %in% c("Ideal", "Premium", "Very Good") & color %in% c("D", "E", "F"))
 head(diamonds)
 
-kruskal_letters <- letter_groups(diamonds, price, clarity, "kruskal", cut, color, print_position = "above", print_adjust = 0.5)
+kruskal_letters <- letter_groups(
+  diamonds,
+  price,
+  clarity,
+  "kruskal",
+  cut,
+  color,
+  print_position = "above",
+  print_adjust = 0.5
+)
 
 head(kruskal_letters)
 
