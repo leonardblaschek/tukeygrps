@@ -23,6 +23,7 @@ You can install tukeygrps from github using devtools:
 
 ``` r
 install.packages("devtools")
+library("devtools")
 install_github("leonardblaschek/tukeygrps")
 ```
 
@@ -41,9 +42,9 @@ Before you use this function, make sure that your observations are:
 
 If they are **not**, scroll down to the *non-parametric comparisons*.
 
-Here we use tukey\_groups() to quickly add letters to a geom\_point
-plot. Alpha is set to 0.001, the letters are printed at y = 0, and there
-are no additional grouping variables.
+Here we use letter\_groups() with stat\_method = “tukey” to add letters
+to a geom\_point plot. Alpha is set to 0.001, the letters are printed at
+y = 0, and there are no additional grouping variables.
 
 ``` r
 library(tukeygrps)
@@ -61,16 +62,16 @@ head(mpg)
 #> 5 audi         a4      2.8  1999     6 auto(… f        16    26 p     comp…
 #> 6 audi         a4      2.8  1999     6 manua… f        18    26 p     comp…
 
-tukey_letters <- tukey_groups(mpg, hwy, class, print_position = 0, stat_alpha = 0.001)
+tukey_letters <- letter_groups(mpg, hwy, class, "tukey", print_position = 0, stat_alpha = 0.001)
 
 head(tukey_letters)
-#>            hwy groups      class
-#> compact      0      a    compact
-#> subcompact   0      a subcompact
-#> midsize      0      a    midsize
-#> 2seater      0     ab    2seater
-#> minivan      0     bc    minivan
-#> suv          0     cd        suv
+#>                mean groups      class hwy
+#> compact    28.29787      a    compact   0
+#> subcompact 28.14286      a subcompact   0
+#> midsize    27.29268      a    midsize   0
+#> 2seater    24.80000     ab    2seater   0
+#> minivan    22.36364     bc    minivan   0
+#> suv        18.12903     cd        suv   0
 
 ggplot() +
   geom_jitter(
@@ -115,19 +116,28 @@ head(diamonds)
 #> 5  0.32 Premium   E     I1       60.9    58   345  4.38  4.42  2.68
 #> 6  0.23 Very Good E     VS2      63.8    55   352  3.85  3.92  2.48
 
-tukey_letters <- tukey_groups(diamonds, price, clarity, cut, color, print_position = -1000, stat_alpha = 0.05,)
+tukey_letters <- letter_groups(
+  diamonds,
+  price,
+  clarity,
+  "tukey",
+  cut,
+  color,
+  print_position = -1000,
+  stat_alpha = 0.05,
+)
 
 head(tukey_letters)
-#> # A tibble: 6 x 5
+#> # A tibble: 6 x 6
 #> # Groups:   cut, color [1]
-#>   cut       color price groups clarity
-#>   <ord>     <ord> <dbl> <chr>  <chr>  
-#> 1 Very Good D     -1000 a      IF     
-#> 2 Very Good D     -1000 b      SI2    
-#> 3 Very Good D     -1000 c      SI1    
-#> 4 Very Good D     -1000 c      VS2    
-#> 5 Very Good D     -1000 c      VVS1   
-#> 6 Very Good D     -1000 c      VS1
+#>   cut       color   mean groups clarity price
+#>   <ord>     <ord>  <dbl> <chr>  <chr>   <dbl>
+#> 1 Very Good D     10298. a      IF      -1000
+#> 2 Very Good D      4425. b      SI2     -1000
+#> 3 Very Good D      3235. c      SI1     -1000
+#> 4 Very Good D      3145. c      VS2     -1000
+#> 5 Very Good D      2988. c      VVS1    -1000
+#> 6 Very Good D      2955. c      VS1     -1000
 
 ggplot() +
   geom_jitter(
@@ -189,7 +199,7 @@ head(diamonds)
 #> 5  0.32 Premium   E     I1       60.9    58   345  4.38  4.42  2.68
 #> 6  0.23 Very Good E     VS2      63.8    55   352  3.85  3.92  2.48
 
-kruskal_letters <- kruskal_groups(diamonds, price, clarity, cut, color, print_position = "above", print_adjust = 0.5)
+kruskal_letters <- letter_groups(diamonds, price, clarity, "kruskal", cut, color, print_position = "above", print_adjust = 0.5)
 
 head(kruskal_letters)
 #> # A tibble: 6 x 6

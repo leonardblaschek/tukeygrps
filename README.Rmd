@@ -27,6 +27,7 @@ You can install tukeygrps from github using devtools:
 
 ``` {r, eval=FALSE}
 install.packages("devtools")
+library("devtools")
 install_github("leonardblaschek/tukeygrps")
 ```
 
@@ -43,7 +44,7 @@ The distributions and sample numbers in these example datasets don't always allo
 
 If they are **not**, scroll down to the *non-parametric comparisons*.
 
-Here we use tukey_groups() to quickly add letters to a geom_point plot. Alpha is set to 0.001, the letters are printed at y = 0, and there are no additional grouping variables.
+Here we use letter_groups() with stat_method = "tukey" to add letters to a geom_point plot. Alpha is set to 0.001, the letters are printed at y = 0, and there are no additional grouping variables.
 
 ```{r example no groups, message=FALSE}
 library(tukeygrps)
@@ -52,7 +53,7 @@ library(tidyverse)
 data(mpg)
 head(mpg)
 
-tukey_letters <- tukey_groups(mpg, hwy, class, print_position = 0, stat_alpha = 0.001)
+tukey_letters <- letter_groups(mpg, hwy, class, "tukey", print_position = 0, stat_alpha = 0.001)
 
 head(tukey_letters)
 
@@ -87,7 +88,16 @@ diamonds <- diamonds %>%
   filter(cut %in% c("Ideal", "Premium", "Very Good") & color %in% c("D", "E", "F"))
 head(diamonds)
 
-tukey_letters <- tukey_groups(diamonds, price, clarity, cut, color, print_position = -1000, stat_alpha = 0.05,)
+tukey_letters <- letter_groups(
+  diamonds,
+  price,
+  clarity,
+  "tukey",
+  cut,
+  color,
+  print_position = -1000,
+  stat_alpha = 0.05,
+)
 
 head(tukey_letters)
 
@@ -137,7 +147,7 @@ diamonds <- diamonds %>%
   filter(cut %in% c("Ideal", "Premium", "Very Good") & color %in% c("D", "E", "F"))
 head(diamonds)
 
-kruskal_letters <- kruskal_groups(diamonds, price, clarity, cut, color, print_position = "above", print_adjust = 0.5)
+kruskal_letters <- letter_groups(diamonds, price, clarity, "kruskal", cut, color, print_position = "above", print_adjust = 0.5)
 
 head(kruskal_letters)
 
