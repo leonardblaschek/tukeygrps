@@ -45,19 +45,19 @@ internal_stats <- function(
   if (print_position == "above") {
     print_position_calc <- df %>%
       dplyr::group_by(!!x) %>%
-      dplyr::summarise(!!y := max(!!y) + print_adjust * raw_sd$sd)
+      dplyr::summarise(!!y := max(!!y, na.rm = TRUE) + print_adjust * raw_sd$sd)
     groups$groups[[dplyr::quo_name(x)]] <- rownames(groups$groups)
     groups$groups <- dplyr::left_join(groups$groups, print_position_calc)
   } else if (print_position == "mean") {
     print_position_calc <- df %>%
       dplyr::group_by(!!x) %>%
-      dplyr::summarise(!!y := mean(!!y) + print_adjust * raw_sd$sd)
+      dplyr::summarise(!!y := mean(!!y, na.rm = TRUE) + print_adjust * raw_sd$sd)
     groups$groups[[dplyr::quo_name(x)]] <- rownames(groups$groups)
     groups$groups <- dplyr::left_join(groups$groups, print_position_calc)
   } else if (print_position == "below") {
     print_position_calc <- df %>%
       dplyr::group_by(!!x) %>%
-      dplyr::summarise(!!y := min(!!y) + print_adjust * raw_sd$sd)
+      dplyr::summarise(!!y := min(!!y, na.rm = TRUE) - print_adjust * raw_sd$sd)
     groups$groups[[dplyr::quo_name(x)]] <- rownames(groups$groups)
     groups$groups <- dplyr::left_join(groups$groups, print_position_calc)
   } else {
