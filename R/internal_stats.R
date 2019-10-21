@@ -41,7 +41,7 @@ internal_stats <- function(
     stop("Specify a method for the statistical analysis (either 'tukey' or 'kruskal')")
   }
   colnames(groups$groups)[1] <- "mean"
-  raw_sd <- df %>% dplyr::summarise(sd = sd(!!y))
+  raw_sd <- df %>% dplyr::summarise(sd = sd(!!y), na.rm = TRUE)
   if (print_position == "above") {
     print_position_calc <- df %>%
       dplyr::group_by(!!x) %>%
