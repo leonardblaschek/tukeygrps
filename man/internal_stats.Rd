@@ -22,7 +22,7 @@ internal_stats(df, y, x, stat_method, print_position, print_adjust,
 
 \item{stat_alpha}{The significance threshold alpha for the the Kruskal-Wallis test. Defaults to 0.05.}
 
-\item{p_adj_method}{Method for p value adjustment when stat_method = "kruskal". One of "none","holm","hommel", "hochberg", "bonferroni", "BH", "BY" or "fdr". Defaults to "holm".}
+\item{p_adj_method}{Method for p value adjustment when stat_method = "kruskal". One of "none", "holm", "hommel", "hochberg", "bonferroni", "BH", "BY" or "fdr". Defaults to "holm".}
 }
 \description{
 Internal helper that is called after the grouping.

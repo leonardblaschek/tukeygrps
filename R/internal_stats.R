@@ -9,7 +9,7 @@
 #' @param print_position The y position at which the letter annotation will be placed in the plot. One of "above", "mean", "below", or a numeric value.
 #' @param print_adjust Adjustment of the letter position multiples of the overall standard deviations. Defaults to 1.
 #' @param stat_alpha The significance threshold alpha for the the Kruskal-Wallis test. Defaults to 0.05.
-#' @param p_adj_method Method for p value adjustment when stat_method = "kruskal". One of "none","holm","hommel", "hochberg", "bonferroni", "BH", "BY" or "fdr". Defaults to "holm".
+#' @param p_adj_method Method for p value adjustment when stat_method = "kruskal". One of "none", "holm", "hommel", "hochberg", "bonferroni", "BH", "BY" or "fdr". Defaults to "holm".
 #' @keywords internal
 #' @export
 
