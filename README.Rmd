@@ -19,15 +19,15 @@ knitr::opts_chunk$set(
 [![CRAN status](https://www.r-pkg.org/badges/version/tukeygrps)](https://cran.r-project.org/package=tukeygrps)
 <!-- badges: end -->
 
-Tukeygrps provides simple wrapper functions for the annotation of (gg)plots according to statistical differences between groups determined by a parametric Tukey-HSD test or a non-parametric Kruskal-Wallis test. The underlying statistical functions are called from the *agricolae* package.
+Tukeygrps provides simple wrapper functions for the annotation of (gg)plots according to statistical differences between groups determined by a parametric Tukey-HSD test from {stats} or a non-parametric Kruskal-Wallis test with Dunn's test for multiple comparisons from {dunn.test}.
 
 ## Installation
 
-You can install tukeygrps from github using devtools:
+You can install tukeygrps from github using remotes:
 
 ``` {r, eval=FALSE}
-install.packages("devtools")
-library("devtools")
+install.packages("remotes")
+library("remotes")
 install_github("leonardblaschek/tukeygrps")
 ```
 
@@ -136,7 +136,7 @@ ggplot() +
 
 ### Non-parametric multiple comparisons 
 
-In case the above requirements for parametric tests are not met, we can fall back to the non-parametric Kruskal–Wallis test with *p*-value adjustment for multiple comparisons. Here we place the letter codes 0.5 standard deviations above the maximum values.
+In case the above requirements for parametric tests are not met, we can fall back to the non-parametric Kruskal–Wallis test followed by Dunn's test and optional *p*-value adjustment for multiple comparisons. Here we place the letter codes 0.5 standard deviations above the maximum values.
 
 ```{r example non-parametric, warning=FALSE, message=FALSE}
 library(tukeygrps)

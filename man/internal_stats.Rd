@@ -4,11 +4,19 @@
 \alias{internal_stats}
 \title{letter_groups internal helper function}
 \usage{
-internal_stats(df, y, x, stat_method, print_position, print_adjust,
-  stat_alpha, p_adj_method)
+internal_stats(
+  df,
+  y,
+  x,
+  stat_method,
+  print_position,
+  print_adjust,
+  stat_alpha,
+  p_adj_method
+)
 }
 \arguments{
-\item{df}{A data.frame.}
+\item{df}{A data frame.}
 
 \item{y}{The name of the y (dependent) variable.}
 
@@ -20,9 +28,9 @@ internal_stats(df, y, x, stat_method, print_position, print_adjust,
 
 \item{print_adjust}{Adjustment of the letter position multiples of the overall standard deviations. Defaults to 1.}
 
-\item{stat_alpha}{The significance threshold alpha for the the Kruskal-Wallis test. Defaults to 0.05.}
+\item{stat_alpha}{The significance threshold alpha. Defaults to 0.05.}
 
-\item{p_adj_method}{Method for p value adjustment when stat_method = "kruskal". One of "none", "holm", "hommel", "hochberg", "bonferroni", "BH", "BY" or "fdr". Defaults to "holm".}
+\item{p_adj_method}{Method for p value adjustment, see ?dunn.test::dunn.test for details. One of "none", "bonferroni", "sidak", "holm", "hs", "hochberg", "bh", "by". Defaults to "holm".}
 }
 \description{
 Internal helper that is called after the grouping.
