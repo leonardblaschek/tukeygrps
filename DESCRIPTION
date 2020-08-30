@@ -1,6 +1,6 @@
 Package: tukeygrps
 Title: Statistical Letter Codes for Plot Annotation
-Version: 0.1
+Version: 0.2
 Authors@R: 
     person(given = "Leonard",
            family = "Blaschek",

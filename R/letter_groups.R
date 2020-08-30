@@ -1,6 +1,6 @@
 #' Statistical plot annotation
 #'
-#' This is a simple wrapper function that outputs a data frame that can be used to annotate your plot with letter codes according to significant differences between groups. The The function currently supports the parametric Tukey HSD test {stats}, and the non-parametric Kruskal-Wallis test with Dunn's test for multiple comparisons {dunn.test}. In addition to the data and formula, the function takes as input a positional variable for placement on the plot, the threshold for statistical significance alpha, the method for p-value adjustment, and grouping variables for faceted plots.
+#' This is a simple wrapper function that outputs a data frame that can be used to annotate your plot with letter codes according to significant differences between groups. The function currently supports the parametric Tukey HSD test from 'stats' and the non-parametric Kruskal-Wallis test with Dunn's test for multiple comparisons from 'dunn.test'. In addition to the data and formula, the function takes as input a positional variable for placement on the plot, the threshold for statistical significance alpha, the method for p-value adjustment, and grouping variables for faceted plots.
 #'
 #' @param df A data frame.
 #' @param y The name of the y (dependent) variable.
