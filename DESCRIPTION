@@ -11,7 +11,10 @@ Description: This is a simple helper package that outputs a data frame that can 
 License: GPL-3
 Imports:
     dplyr,
-    agricolae
+    stringr,
+    tibble,
+    dunn.test,
+    multcompView
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
