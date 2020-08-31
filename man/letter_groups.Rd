@@ -36,7 +36,7 @@ letter_groups(
 \item{p_adj_method}{Method for p value adjustment, see ?dunn.test::dunn.test for details. One of "none", "bonferroni", "sidak", "holm", "hs", "hochberg", "bh", "by". Defaults to "holm".}
 }
 \description{
-This is a simple wrapper function that outputs a data frame that can be used to annotate your plot with letter codes according to significant differences between groups. The The function currently supports the parametric Tukey HSD test {stats}, and the non-parametric Kruskal-Wallis test with Dunn's test for multiple comparisons {dunn.test}. In addition to the data and formula, the function takes as input a positional variable for placement on the plot, the threshold for statistical significance alpha, the method for p-value adjustment, and grouping variables for faceted plots.
+This is a simple wrapper function that outputs a data frame that can be used to annotate your plot with letter codes according to significant differences between groups. The function currently supports the parametric Tukey HSD test from 'stats' and the non-parametric Kruskal-Wallis test with Dunn's test for multiple comparisons from 'dunn.test'. In addition to the data and formula, the function takes as input a positional variable for placement on the plot, the threshold for statistical significance alpha, the method for p-value adjustment, and grouping variables for faceted plots.
 }
 \examples{
 test_data <- tibble(value = rnorm(1000), sample = sample(LETTERS[1:5], 1000, replace = TRUE), group = sample(LETTERS[24:26], 1000, replace = TRUE))

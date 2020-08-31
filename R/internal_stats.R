@@ -39,10 +39,13 @@ internal_stats <- function(
     names(dunn_vector) <- dunn$comparisons
 
     # calculate letter codes
+    model_formula <- formula(paste0(dplyr::quo_name(y), "~", dplyr::quo_name(x)))
     groups <- data.frame(
-      multcompView::multcompLetters(
+      multcompView::multcompLetters2(
+        model_formula,
         dunn_vector,
-        threshold = stat_alpha
+        threshold = stat_alpha,
+        data = data.frame(df)
       )["Letters"]
     )
   } else if (stat_method == "tukey") {
@@ -55,9 +58,11 @@ internal_stats <- function(
     )
     # calculate letter codes
     groups <- data.frame(
-      multcompView::multcompLetters(
+      multcompView::multcompLetters2(
+        model_formula,
         base_tukey[[dplyr::quo_name(x)]][, 4],
-        threshold = stat_alpha
+        threshold = stat_alpha,
+        data = data.frame(df)
       )["Letters"]
     )
   } else {
