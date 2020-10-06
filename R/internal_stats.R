@@ -18,6 +18,7 @@ internal_stats <- function(
                            y,
                            x,
                            stat_method,
+                           grp,
                            print_position,
                            print_adjust,
                            stat_alpha,
