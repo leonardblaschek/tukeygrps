@@ -45,7 +45,7 @@ internal_stats <- function(
         model_formula,
         dunn_vector,
         threshold = stat_alpha,
-        data = data.frame(drop_na(df, !!x, !!y))
+        data = data.frame(drop_na(df, !!x, !!y, !!!grp))
       )["Letters"]
     )
   } else if (stat_method == "tukey") {
@@ -62,7 +62,7 @@ internal_stats <- function(
         model_formula,
         base_tukey[[dplyr::quo_name(x)]][, 4],
         threshold = stat_alpha,
-        data = data.frame(drop_na(df, !!x, !!y))
+        data = data.frame(drop_na(df, !!x, !!y, !!!grp))
       )["Letters"]
     )
   } else {
