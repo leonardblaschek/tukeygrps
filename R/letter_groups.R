@@ -31,8 +31,9 @@ letter_groups <- function(
   grp <- dplyr::enquos(...)
 
   df %>%
+    drop_na(!!x, !!y, !!!grp) %>%
     dplyr::mutate(!!x := stringr::str_replace(!!x, fixed("-"), "PLACEHOLDER")) %>%
     dplyr::group_by(!!!grp) %>%
-    dplyr::group_modify(~ data.frame(internal_stats(., y, x, stat_method, grp, print_position, print_adjust, stat_alpha, p_adj_method))) %>%
+    dplyr::group_modify(~ data.frame(internal_stats(., y, x, stat_method, print_position, print_adjust, stat_alpha, p_adj_method))) %>%
     dplyr::mutate(!!x := stringr::str_replace(!!x, "PLACEHOLDER", fixed("-")))
 }
