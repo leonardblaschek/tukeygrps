@@ -30,18 +30,21 @@ You can install tukeygrps from github using remotes:
 Examples
 --------
 
-### Parametric multiple comparisons
-
-The distributions and sample numbers in these example datasets don’t
-always allow for the use of a parametric test such as the Tukey-HSD.
-Before you use this function, make sure that your observations are:
+*Parametric* multiple comparisons like the Tukey HSD (honest significant
+differences) test shown in section **1** are only recommended in cases
+where the data fulfill all of the following conditions:
 
 -   **normally** distributed
 -   **homoscedastic**
 -   **independent** within and between groups
 -   **equal** in sample size
 
-If they are **not**, scroll down to the *non-parametric comparisons*.
+If you have strong evidence that they do not fulfill these conditions,
+consider a *non-parametric* method of comparison, like the
+Kruskal-Wallis test followed by Dunn’s multiple comparisons shown in
+section **2**.
+
+### 1. Parametric multiple comparisons
 
 Here we use letter\_groups() with stat\_method = “tukey” to add letters
 to a geom\_point plot. Alpha is set to 0.001, the letters are printed at
@@ -65,13 +68,13 @@ y = 0, and there are no additional grouping variables.
     tukey_letters <- letter_groups(mpg, hwy, class, "tukey", print_position = 0, stat_alpha = 0.001)
 
     head(tukey_letters)
-    #>                mean groups      class hwy
-    #> compact    28.29787      a    compact   0
-    #> subcompact 28.14286      a subcompact   0
-    #> midsize    27.29268      a    midsize   0
-    #> 2seater    24.80000     ab    2seater   0
-    #> minivan    22.36364     bc    minivan   0
-    #> suv        18.12903     cd        suv   0
+    #>        class Letters hwy
+    #> 1    compact       a   0
+    #> 2 subcompact       a   0
+    #> 3    midsize       a   0
+    #> 4    2seater      ab   0
+    #> 5    minivan      bc   0
+    #> 6        suv      cd   0
 
     ggplot() +
       geom_jitter(
@@ -87,7 +90,7 @@ y = 0, and there are no additional grouping variables.
         aes(
           x = class,
           y = hwy,
-          label = groups
+          label = Letters
         )
       ) +
       coord_flip()
@@ -95,7 +98,8 @@ y = 0, and there are no additional grouping variables.
 <img src="man/figures/README-example no groups-1.png" width="100%" />
 
 Here we split the statistical analysis by two grouping variables (“cut”
-and “color”), set the alpha to 0.05 and print the letters at y = -1000.
+and “color”), set the alpha to 0.05 and print the letters 0.5 standard
+deviations below the respective minimum value.
 
     library(tukeygrps)
     library(tidyverse)
@@ -121,21 +125,22 @@ and “color”), set the alpha to 0.05 and print the letters at y = -1000.
       "tukey",
       cut,
       color,
-      print_position = -1000,
+      print_position = "below",
+      print_adjust = 0.5,
       stat_alpha = 0.05,
     )
 
     head(tukey_letters)
-    #> # A tibble: 6 x 6
+    #> # A tibble: 6 x 5
     #> # Groups:   cut, color [1]
-    #>   cut       color   mean groups clarity price
-    #>   <ord>     <ord>  <dbl> <chr>  <chr>   <dbl>
-    #> 1 Very Good D     10298. a      IF      -1000
-    #> 2 Very Good D      4425. b      SI2     -1000
-    #> 3 Very Good D      3235. c      SI1     -1000
-    #> 4 Very Good D      3145. c      VS2     -1000
-    #> 5 Very Good D      2988. c      VVS1    -1000
-    #> 6 Very Good D      2955. c      VS1     -1000
+    #>   cut       color Letters clarity  price
+    #>   <ord>     <ord> <chr>   <chr>    <dbl>
+    #> 1 Very Good D     a       IF       -591.
+    #> 2 Very Good D     b       SI2     -1349.
+    #> 3 Very Good D     c       SI1     -1287.
+    #> 4 Very Good D     c       VS2     -1405.
+    #> 5 Very Good D     bc      VVS1    -1304.
+    #> 6 Very Good D     c       VS1     -1405.
 
     ggplot() +
       geom_jitter(
@@ -162,7 +167,7 @@ and “color”), set the alpha to 0.05 and print the letters at y = -1000.
         aes(
           x = clarity,
           y = price,
-          label = groups
+          label = Letters
         ),
         size = 3
       ) +
@@ -171,12 +176,12 @@ and “color”), set the alpha to 0.05 and print the letters at y = -1000.
 
 <img src="man/figures/README-example-1.png" width="100%" />
 
-### Non-parametric multiple comparisons
+### 2. Non-parametric multiple comparisons
 
 In case the above requirements for parametric tests are not met, we can
 fall back to the non-parametric Kruskal–Wallis test followed by Dunn’s
-test and optional *p*-value adjustment for multiple comparisons. Here we
-place the letter codes 0.5 standard deviations above the maximum values.
+test and *p*-value adjustment for multiple comparisons. Here we place
+the letter codes 0.5 standard deviations above the maximum values.
 
     library(tukeygrps)
     library(tidyverse)
@@ -184,16 +189,6 @@ place the letter codes 0.5 standard deviations above the maximum values.
     data(diamonds)
     diamonds <- diamonds %>%
       filter(cut %in% c("Ideal", "Premium", "Very Good") & color %in% c("D", "E", "F"))
-    head(diamonds)
-    #> # A tibble: 6 x 10
-    #>   carat cut       color clarity depth table price     x     y     z
-    #>   <dbl> <ord>     <ord> <ord>   <dbl> <dbl> <int> <dbl> <dbl> <dbl>
-    #> 1  0.23 Ideal     E     SI2      61.5    55   326  3.95  3.98  2.43
-    #> 2  0.21 Premium   E     SI1      59.8    61   326  3.89  3.84  2.31
-    #> 3  0.22 Premium   F     SI1      60.4    61   342  3.88  3.84  2.33
-    #> 4  0.2  Premium   E     SI2      60.2    62   345  3.79  3.75  2.27
-    #> 5  0.32 Premium   E     I1       60.9    58   345  4.38  4.42  2.68
-    #> 6  0.23 Very Good E     VS2      63.8    55   352  3.85  3.92  2.48
 
     kruskal_letters <- letter_groups(
       diamonds,
@@ -203,20 +198,11 @@ place the letter codes 0.5 standard deviations above the maximum values.
       cut,
       color,
       print_position = "above",
-      print_adjust = 0.5
+      print_adjust = 0.5,
+      p_adj_method = "holm"
     )
 
     head(kruskal_letters)
-    #> # A tibble: 6 x 6
-    #> # Groups:   cut, color [1]
-    #>   cut       color  mean groups clarity  price
-    #>   <ord>     <ord> <dbl> <chr>  <chr>    <dbl>
-    #> 1 Very Good D     1243. a      IF      20304.
-    #> 2 Very Good D      895. b      SI2     20288.
-    #> 3 Very Good D      794. bc     I1       5578.
-    #> 4 Very Good D      765. c      SI1     18048.
-    #> 5 Very Good D      731. c      VS2     18915.
-    #> 6 Very Good D      686. c      VS1     18512.
 
     ggplot() +
       geom_jitter(
@@ -243,7 +229,7 @@ place the letter codes 0.5 standard deviations above the maximum values.
         aes(
           x = clarity,
           y = price,
-          label = groups
+          label = Letters
         ),
         size = 3
       ) +
