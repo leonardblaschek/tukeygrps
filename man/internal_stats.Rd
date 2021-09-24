@@ -12,7 +12,8 @@ internal_stats(
   print_position,
   print_adjust,
   stat_alpha,
-  p_adj_method
+  p_adj_method,
+  table
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ internal_stats(
 \item{stat_alpha}{The significance threshold alpha. Defaults to 0.05.}
 
 \item{p_adj_method}{Method for p value adjustment, see ?dunn.test::dunn.test for details. One of "none", "bonferroni", "sidak", "holm", "hs", "hochberg", "bh", "by". Defaults to "holm".}
+
+\item{table}{A logical value indicating whether to return a data frame with the letter codes according to significance (table = FALSE, default), or a table containing the calculated statistics (P-values, df, etc.).}
 }
 \description{
 Internal helper that is called after the grouping.

@@ -13,7 +13,8 @@ letter_groups(
   print_position = 0,
   print_adjust = 1,
   stat_alpha = 0.05,
-  p_adj_method = "holm"
+  p_adj_method = "holm",
+  table = FALSE
 )
 }
 \arguments{
@@ -34,13 +35,15 @@ letter_groups(
 \item{stat_alpha}{The significance threshold alpha. Defaults to 0.05.}
 
 \item{p_adj_method}{Method for p value adjustment, see ?dunn.test::dunn.test for details. One of "none", "bonferroni", "sidak", "holm", "hs", "hochberg", "bh", "by". Defaults to "holm".}
+
+\item{table}{A logical value indicating whether to return a data frame with the letter codes according to significance (table = FALSE, default), or a table containing the calculated statistics (P-values, df, etc.).}
 }
 \description{
 This is a simple wrapper function that outputs a data frame that can be used to annotate your plot with letter codes according to significant differences between groups. The function currently supports the parametric Tukey HSD test from 'stats' and the non-parametric Kruskal-Wallis test with Dunn's test for multiple comparisons from 'dunn.test'. In addition to the data and formula, the function takes as input a positional variable for placement on the plot, the threshold for statistical significance alpha, the method for p-value adjustment, and grouping variables for faceted plots.
 }
 \examples{
 test_data <- tibble(value = rnorm(1000), sample = sample(LETTERS[1:5], 1000, replace = TRUE), group = sample(LETTERS[24:26], 1000, replace = TRUE))
-annotation_df <- letter_groups(test_data, value, sample, "tukey", group, stat_alpha = 0.001, print_position = "above", print_adjust = 0.5, p_adj_method = "holm")
+annotation_df <- letter_groups(test_data, value, sample, "tukey", group, stat_alpha = 0.001, print_position = "above", print_adjust = 0.5, p_adj_method = "holm", table = FALSE)
 }
 \keyword{HSD,}
 \keyword{Kruskal-Wallis,}
